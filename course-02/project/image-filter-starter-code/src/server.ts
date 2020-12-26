@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { isWebUri } from 'valid-url';
 
 (async () => {
 
@@ -36,6 +37,11 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
       return res.status(400)
           .send(`image_url is required`);
     }
+
+    if (!isWebUri(image_url)) {
+      return res
+          .status(400)
+          .send({ error: "image_url must be a valid url" });}
 
     const filteredpath = await filterImageFromURL(image_url);
 
