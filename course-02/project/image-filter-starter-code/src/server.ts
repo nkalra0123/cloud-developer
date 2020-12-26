@@ -43,7 +43,7 @@ import { isWebUri } from 'valid-url';
           .status(400)
           .send({ error: "image_url must be a valid url" });}
 
-    const filteredpath = await filterImageFromURL(image_url);
+    const filteredpath : string = await filterImageFromURL(image_url);
 
     res.status(200).sendFile(filteredpath,()=>
     {
