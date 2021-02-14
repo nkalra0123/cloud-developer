@@ -6,25 +6,38 @@ import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import {updateTodo} from "../../businessLogic/todos";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
-  const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+  try {
 
-  const authorization = event.headers.Authorization
-  const split = authorization.split(' ')
-  const jwtToken = split[1]
+    const todoId = event.pathParameters.todoId
+    const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
 
-  console.log(jwtToken)
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
 
-  await updateTodo(updatedTodo,jwtToken, todoId)
+    console.log(jwtToken)
 
-  // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
-  //return undefined
+    await updateTodo(updatedTodo, jwtToken, todoId)
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: ''
+    // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
+    //return undefined
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: ''
+    }
+  }
+  catch(e){
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      body: JSON.stringify({e})
+    }
   }
 }

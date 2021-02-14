@@ -4,26 +4,40 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } f
 import {deleteTodo} from "../../businessLogic/todos";
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
 
-  // TODO: Remove a TODO item by id
+  try {
 
-  const authorization = event.headers.Authorization
-  const split = authorization.split(' ')
-  const jwtToken = split[1]
+    const todoId = event.pathParameters.todoId
 
-  console.log(jwtToken)
+    // TODO: Remove a TODO item by id
 
-  console.log('Processing event: ', event)
+    const authorization = event.headers.Authorization
+    const split = authorization.split(' ')
+    const jwtToken = split[1]
 
-  await deleteTodo(todoId, jwtToken)
+    console.log(jwtToken)
 
-  console.log('deleted ', todoId)
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
-    body: ''
+    console.log('Processing event: ', event)
+
+    await deleteTodo(todoId, jwtToken)
+
+    console.log('deleted ', todoId)
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: ''
+    }
+  }
+  catch(e){
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
+      body: JSON.stringify({e})
+    }
   }
 }
