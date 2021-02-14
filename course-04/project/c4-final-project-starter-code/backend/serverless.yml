@@ -21,6 +21,7 @@ provider:
   environment:
     REGION: ${self:provider.region}
     TODOS_TABLE: Todo-${self:provider.stage}
+    INDEX_NAME: Index-${self:provider.stage}
     IMAGES_S3_BUCKET: serverless-todo-nkalra0123-adbcdef-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
