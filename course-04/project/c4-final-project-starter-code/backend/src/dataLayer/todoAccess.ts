@@ -84,6 +84,28 @@ export class TodoAccess {
 
         return todoId
     }
+
+
+    async updateAttachmentUrl(todoId: string, userId: string, attachmentUrl: string): Promise<string> {
+        console.log(userId);
+        const options = {
+            TableName: this.todosTable,
+            Key: {
+                userId: userId,
+                todoId: todoId
+            },
+            UpdateExpression: "set attachmentUrl = :r",
+            ExpressionAttributeValues: {
+                ":r": attachmentUrl
+            },
+            ReturnValues: "UPDATED_NEW"
+        };
+
+        await this.docClient.update(options).promise()
+        return todoId
+    }
+
+
 }
 
 function createDynamoDBClient() {

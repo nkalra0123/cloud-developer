@@ -52,6 +52,11 @@ export async function updateTodo(
     return await todoAcess.updateTodo(updateTodoRequest, todoId)
 }
 
+export async function updateAttachmentUrl(todoId: string, userId: string, attachmentUrl: string): Promise<String> {
+
+    return await todoAcess.updateAttachmentUrl(todoId, userId, attachmentUrl)
+}
+
 /*
 todoId (string) - a unique id for an item
 createdAt (string) - date and time when an item was created
