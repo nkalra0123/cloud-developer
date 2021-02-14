@@ -26,6 +26,4 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     },
     body: ''
   }
-
-  return undefined
 }
