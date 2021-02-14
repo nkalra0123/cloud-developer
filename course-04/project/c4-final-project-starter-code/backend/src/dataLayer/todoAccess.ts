@@ -10,14 +10,21 @@ export class TodoAccess {
 
     constructor(
         private readonly docClient: DocumentClient = createDynamoDBClient(),
-        private readonly todosTable = process.env.TODOS_TABLE) {
+        private readonly todosTable = process.env.TODOS_TABLE,
+        private readonly indexTable = process.env.INDEX_NAME)
+    {
     }
 
-    async getAllTodoItems(): Promise<TodoItem[]> {
+    async getAllTodoItems(userId: string): Promise<TodoItem[]> {
         console.log('Getting all groups')
 
-        const result = await this.docClient.scan({
-            TableName: this.todosTable
+        const result = await this.docClient.query({
+            TableName: this.todosTable,
+            IndexName: this.indexTable,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+                ':userId': userId
+            }
         }).promise()
 
         const items = result.Items
@@ -66,7 +73,8 @@ export class TodoAccess {
         return todoUpdate
     }
 
-    async deleteTodo(todoId: string): Promise<string> {
+    async deleteTodo(todoId: string, userId: string): Promise<string> {
+        console.log(userId);
         await this.docClient.delete({
             Key:{
                 "todoId": todoId,

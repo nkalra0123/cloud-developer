@@ -16,7 +16,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   console.log('Processing event: ', event)
 
-  await deleteTodo(todoId)
+  await deleteTodo(todoId, jwtToken)
 
   console.log('deleted ', todoId)
   return {

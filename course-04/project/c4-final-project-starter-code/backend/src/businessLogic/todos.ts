@@ -9,12 +9,18 @@ import {TodoUpdate} from "../models/TodoUpdate";
 
 const todoAcess = new TodoAccess();
 
-export async function getAllTodo(): Promise<TodoItem[]> {
-    return todoAcess.getAllTodoItems();
+export async function getAllTodo(jwtToken: string): Promise<TodoItem[]> {
+    const userId = parseUserId(jwtToken)
+    console.log(userId)
+
+    return todoAcess.getAllTodoItems(userId);
 }
 
-export async function deleteTodo(todoId: string): Promise<string> {
-    return todoAcess.deleteTodo(todoId);
+export async function deleteTodo(todoId: string, jwtToken: string): Promise<string> {
+    const userId = parseUserId(jwtToken)
+    console.log(userId)
+
+    return todoAcess.deleteTodo(todoId, userId);
 }
 
 export async function createTodo(
