@@ -53,6 +53,7 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -66,6 +67,12 @@ functions:
           - dynamodb:Scan
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.INDEX_NAME}
+      - Effect: Allow
+        Action:
+        - dynamodb:GetItem
+        - dynamodb:Scan
+        - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
       - Effect: Allow
         Action:
           - s3:GetObject
@@ -127,6 +134,11 @@ functions:
           - dynamodb:PutItem
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.INDEX_NAME}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
 
   # TODO: Configure this function
   DeleteTodo:
