@@ -133,16 +133,19 @@ functions:
         Action:
           - dynamodb:PutItem
           - dynamodb:Query
+          - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
         Action:
           - dynamodb:PutItem
           - dynamodb:Query
+          - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.INDEX_NAME}
       - Effect: Allow
         Action:
           - dynamodb:PutItem
           - dynamodb:Query
+          - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.INDEX_NAME}
 
   # TODO: Configure this function
@@ -176,7 +179,12 @@ functions:
           method: post
           authorizer: Auth
           path: todos/{todoId}/attachment
+          cors: true
     iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
         Action:
           - s3:PutObject
