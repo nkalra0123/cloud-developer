@@ -49,7 +49,7 @@ export async function updateTodo(
     const userId = parseUserId(jwtToken)
     console.log(userId)
 
-    return await todoAcess.updateTodo(updateTodoRequest, todoId)
+    return await todoAcess.updateTodo(updateTodoRequest, todoId, userId)
 }
 
 export async function updateAttachmentUrl(todoId: string, userId: string, attachmentUrl: string): Promise<String> {
