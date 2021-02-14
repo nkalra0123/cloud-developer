@@ -80,16 +80,19 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
     console.error(err);
   }
 
-  const signingKeys = cert.data
-      .filter(key => key.use === 'sig' // JWK property `use` determines the JWK is for signing
+  const signingKeys = cert.data.keys.filter(key => key.use === 'sig' // JWK property `use` determines the JWK is for signing
           && key.kty === 'RSA' // We are only supporting RSA
           && key.kid           // The `kid` must be present to be useful for later
           && key.x5c && key.x5c.length // Has useful public keys (we aren't using n or e)
       ).map(key => {
         return { kid: key.kid, nbf: key.nbf, publicKey: certToPEM(key.x5c[0]) };
-      });
+      })
 
-  return verify(token, signingKeys, { algorithms: ['RS256'] }) as JwtPayload
+  console.log("filtered")
+  console.log(signingKeys)
+  console.log(signingKeys[0].publicKey);
+
+  return verify(token, signingKeys[0].publicKey, { algorithms: ['RS256'] }) as JwtPayload
 }
 
 function getToken(authHeader: string): string {
