@@ -37,8 +37,8 @@ custom:
         contentType: application/json
         schema: ${file(models/create-todo-request.json)}
       - name: UpdateTodoRequest
-          contentType: application/json
-          schema: ${file(models/update-todo-request.json)}
+        contentType: application/json
+        schema: ${file(models/update-todo-request.json)}
 
 functions:
 
@@ -61,9 +61,9 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
-          Action:
-            - s3:GetObject
-          Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+        Action:
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
   # TODO: Configure this function
   CreateTodo:
@@ -87,10 +87,10 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
       - Effect: Allow
-          Action:
-            - s3:PutObject
-            - s3:GetObject
-          Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+        Action:
+          - s3:PutObject
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
   # TODO: Configure this function
   UpdateTodo:
@@ -123,15 +123,15 @@ functions:
           path: todos/{todoId}
           authorizer: Auth
           cors: true
-    iamRoleStatements
-      - Effect: Allow
-          Action:
-            - dynamodb:DeleteItem
-          Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+    iamRoleStatements:
     - Effect: Allow
-        Action:
-          - s3:DeleteObject
-        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+      Action:
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+    - Effect: Allow
+      Action:
+        - s3:DeleteObject
+      Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
   # TODO: Configure this function
   GenerateUploadUrl:
@@ -141,12 +141,12 @@ functions:
           method: post
           authorizer: Auth
           path: todos/{todoId}/attachment
-    iamRoleStatements
+    iamRoleStatements:
       - Effect: Allow
-          Action:
-            - s3:PutObject
-            - s3:GetObject
-          Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+        Action:
+          - s3:PutObject
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
 resources:
   # TODO: Add any necessary AWS resources
